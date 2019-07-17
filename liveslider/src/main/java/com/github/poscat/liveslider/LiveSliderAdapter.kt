@@ -12,6 +12,13 @@ import androidx.viewpager.widget.ViewPager
 import me.relex.circleindicator.CircleIndicator
 import java.util.*
 
+/**
+ * A custom RecyclerView.Adapter for live slider.
+ *
+ * @param T the type of the Feed item that you want.
+ *
+ * Use [me.relex.circleindicator.CircleIndicator] for ViewPager indicator
+ */
 class LiveSliderAdapter<T>(): RecyclerView.Adapter<LiveSliderAdapter<T>.LiveSliderViewHolder>() {
     private lateinit var pagerAdapter : LiveSliderPagerAdapter<T>
     private var delay : Long = 0
@@ -20,6 +27,11 @@ class LiveSliderAdapter<T>(): RecyclerView.Adapter<LiveSliderAdapter<T>.LiveSlid
     private var data : Array<LiveSliderFeed<T>>? = null
     private var autoSwipe : Boolean = false
 
+    /**
+     * You can set ViewPager Auto Swipe and Timer Period use these constructor
+     *
+     * Default delay and period are 4s.
+     */
     constructor(pagerAdapter: LiveSliderPagerAdapter<T>) : this(pagerAdapter, false)
 
     constructor(pagerAdapter: LiveSliderPagerAdapter<T>, autoSwipe: Boolean) : this(pagerAdapter, autoSwipe, 4000, 4000)
@@ -56,6 +68,11 @@ class LiveSliderAdapter<T>(): RecyclerView.Adapter<LiveSliderAdapter<T>.LiveSlid
         return LiveSliderViewHolder(view, context, pagerAdapter, delay, period)
     }
 
+    /**
+     * Call this function to start ViewPager animation when onScrollStateChanged.
+     *
+     * @param position position of the custom ViewPager currently displayed in the RecycleView.
+     */
     fun startAnimation(position: Int) {
         if (position != -1 && currentFeed != position) {
             notifyItemRangeChanged(0, itemCount)
@@ -63,6 +80,11 @@ class LiveSliderAdapter<T>(): RecyclerView.Adapter<LiveSliderAdapter<T>.LiveSlid
         }
     }
 
+    /**
+     * Call this function to set the all RSS-feed data for RecyclerView.
+     *
+     * @param data the type of the all RSS-feed data array
+     */
     fun setData(data: Array<LiveSliderFeed<T>>?) {
         this.data = data
         Log.d("datasize", this.data!!.size.toString())
