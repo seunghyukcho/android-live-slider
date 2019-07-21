@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:id="@+id/page">
+	
+	<ImageView
+		android:id="@+id/image"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:scaleType="centerCrop"
+		android:src="@drawable/default_img"/>
+
+	<TextView
+		android:id="@+id/title"
+		android:text="Title"
+		android:textSize="17dp"
+		android:textStyle="bold"
+		android:textColor="#fff"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:shadowColor="#000000"
+		android:shadowRadius="1.0"
+		android:shadowDx="1.0"
+		android:shadowDy="1.0"
+		android:layout_gravity="left|bottom"
+		android:layout_margin="15dp"/>
+	
+	<TextView
+		android:id="@+id/description"
+		android:bufferType="spannable"
+		android:text="Description"
+		android:textSize="15dp"
+		android:textColor="#fff"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_margin="15dp"
+		android:layout_gravity="center"
+		android:visibility="invisible"/>
+
+</FrameLayout>
