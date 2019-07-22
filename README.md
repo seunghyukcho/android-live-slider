@@ -4,7 +4,7 @@
 [![](https://jitpack.io/v/shhj1998/android-live-slider.svg)](https://jitpack.io/#shhj1998/android-live-slider)
 
 
-Awesome Recyclerview library that supports live animations and auto swipe with ViewPager
+Awesome Recyclerview library that supports live animations and auto swipe with ViewPager.
 
 
 
