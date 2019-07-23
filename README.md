@@ -33,7 +33,7 @@ allprojects {
 
 ```gradle
 dependencies {
-    compile 'com.github.shhj1998:android-live-slider:1.0.4'
+    compile 'com.github.shhj1998:android-live-slider:Tag'
 }
 ```
 
