@@ -39,6 +39,114 @@ dependencies {
 
 ### Usage
 
+> Step 1. Create your ViewPager Layout
+
+Add layout for RSS contents `example_page.xml`:
+
+```xml
+<FrameLayout
+    android:id="@+id/page"
+    ...>
+	
+    <ImageView
+        android:id="@+id/image"
+        .../>
+
+    <TextView
+        android:id="@+id/title"
+        android:text="Title"
+        .../>
+    
+    <TextView
+        android:id="@+id/description"
+        android:text="Description"
+        .../>
+    ...
+```
+
+> Step 2. Define the content type class
+
+```kotlin
+data class ExampleItem (
+    var title: String,
+    var description: String,
+    var img: Bitmap,
+    ...
+)
+```
+
+> Step 3. Create adpapter
+
+Inherit the library `LiveSliderPagerAdapter` and implement a custom adapter.
+
+```kotlin
+class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
+    override fun createView(context: Context, container: ViewGroup, item: ExampleItem): View {
+        val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        // Create and connect the view xml you want to display in the viewPager.
+        val view = inflater.inflate(R.layout.example_page, container, false)
+
+        // Put the item data into the view object you want.
+        view.title.text = item.title                    
+        view.image.setImageBitmap(item.img)
+        ...
+
+        return view
+    }
+
+    // Try adding an animation to the view object.
+    override fun startAnimation(context: Context, view: View) {
+        view.image.startAnimation(AnimationUtils.loadAnimation(context, R.anim.zoom))
+        ...
+    }
+    override fun stopAnimation(context: Context, view: View) {
+        view.image.clearAnimation()
+        ...
+    }
+}
+```
+
+> Step 4. Apply the adapter you just created to RecycleView
+
+Define and initialize the `RecycleView` in the `MainActivity`.
+
+```kotlin
+mRecyclerView = findViewById(R.id.recycler_view)
+...
+
+mExampleAdapter = LiveSliderAdapter(ExamplePageAdapter(), true)
+mExampleAdapter!!.setHasStableIds(true)
+
+mRecyclerView!!.adapter = mExampleAdapter
+
+// If the ViewPager shown in RecycleView changes, start the animation.
+mRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+        super.onScrollStateChanged(recyclerView, newState)
+        
+        if (newState == RecyclerView.SCROLL_STATE_IDLE)
+            mExampleAdapter!!.startAnimation((recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition())
+            
+    }
+})
+```
+
+> Step 5. Set your contents data
+
+When you call the `setData()` function with parsed contents data, it applies directly to the `live-slider`.
+
+```kotlin
+var mSampleData: Array<LiveSliderFeed<ExampleItem>>
+
+...
+
+mExampleAdapter!!.setData(mSampleData)
+```
+
+**Finish!**
+
+You can further refer [example project](app).
+
 
 ## License
 
