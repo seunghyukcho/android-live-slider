@@ -66,7 +66,7 @@ dependencies {
     ...
 ```
 
-#### Step 2. Define your content type class
+#### Step 2. Define your content type class.
 
 ```kotlin
 data class ExampleItem (
@@ -106,7 +106,7 @@ class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
 }
 ```
 
-#### Step 4. Apply the LiveSliderAdapter and your custom LiveSliderPagerAdapter on your RecycleView
+#### Step 4. Apply the LiveSliderAdapter and your custom LiveSliderPagerAdapter on your RecycleView.
 
 ```kotlin
 mRecyclerView = findViewById(R.id.recycler_view)
