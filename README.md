@@ -20,11 +20,9 @@ Awesome Recyclerview library that supports live animations and auto swipe with V
 
 ## Getting Start
 
-### Dependency
+### Dependency Setting
 
-> Step 1. Add the JitPack repository to your build file
-
-Add it in your root `build.gradle` at the end of repositories:
+#### Step 1. Add the JitPack repository in your root project's `build.gradle` file :
 
 ```gradle
 allprojects {
@@ -35,19 +33,17 @@ allprojects {
 }
 ```
 
-> Step 2. Add the dependency
+#### Step 2. Add our library dependency on your project `build.gradle` file.
 
 ```gradle
 dependencies {
-    compile 'com.github.shhj1998:android-live-slider:Tag'
+    implementation 'com.github.shhj1998:android-live-slider:Tag'
 }
 ```
 
 ### Implementation
 
-> Step 1. Create your ViewPager Layout
-
-Add layout for your contents like `example_page.xml`. It will be inside your ViewPager :
+#### Step 1. Create a ViewPager layout like [`example_page.xml`](https://github.com/shhj1998/android-live-slider/blob/master/app/src/main/res/layout/example_page.xml) which will be inside your ViewPager :
 
 ```xml
 <FrameLayout
@@ -70,7 +66,7 @@ Add layout for your contents like `example_page.xml`. It will be inside your Vie
     ...
 ```
 
-> Step 2. Define your content type class
+#### Step 2. Define your content type class
 
 ```kotlin
 data class ExampleItem (
@@ -81,9 +77,7 @@ data class ExampleItem (
 )
 ```
 
-> Step 3. Create adpapter
-
-Inherit the abstract class `LiveSliderPagerAdapter` and implement a custom PagerAdapter.
+#### Step 3. Implement your customer PagerAdapter by inheriting the abstract class `LiveSliderPagerAdapter`.
 
 ```kotlin
 class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
@@ -112,9 +106,7 @@ class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
 }
 ```
 
-> Step 4. Apply the LiveSliderAdapter and your custom LiveSliderPagerAdapter on your RecycleView
-
-Define and initialize the `RecycleView` in the `MainActivity`.
+#### Step 4. Apply the LiveSliderAdapter and your custom LiveSliderPagerAdapter on your RecycleView
 
 ```kotlin
 mRecyclerView = findViewById(R.id.recycler_view)
@@ -139,9 +131,8 @@ mRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 })
 ```
 
-> Step 5. Set your recyclerview data with your contents.
-
-When you call the `setData()` function with parsed contents data, it applies directly to the `live-slider`.
+#### Step 5. Set your recyclerview data with your contents. 
+When you call the `setData()` function with parsed contents data, it applies directly to the `live-slider` recyclerview.
 
 ```kotlin
 var mSampleData: Array<LiveSliderFeed<ExampleItem>>
