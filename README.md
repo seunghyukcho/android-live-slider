@@ -18,9 +18,9 @@ Awesome Recyclerview library that supports live animations and auto swipe with V
 <img src="https://github.com/shhj1998/android-live-slider/blob/master/screenshot/live-slider.gif" width="40%" height="40%"/>
 
 
-## Implementation
+## Getting Start
 
-### Adding Dependency
+### Dependency
 
 > Step 1. Add the JitPack repository to your build file
 
@@ -43,11 +43,11 @@ dependencies {
 }
 ```
 
-### Usage
+### Implementation
 
 > Step 1. Create your ViewPager Layout
 
-Add layout for RSS contents `example_page.xml`:
+Add layout for your contents like `example_page.xml`. It will be inside your ViewPager :
 
 ```xml
 <FrameLayout
@@ -70,7 +70,7 @@ Add layout for RSS contents `example_page.xml`:
     ...
 ```
 
-> Step 2. Define the content type class
+> Step 2. Define your content type class
 
 ```kotlin
 data class ExampleItem (
@@ -83,7 +83,7 @@ data class ExampleItem (
 
 > Step 3. Create adpapter
 
-Inherit the library `LiveSliderPagerAdapter` and implement a custom adapter.
+Inherit the abstract class `LiveSliderPagerAdapter` and implement a custom PagerAdapter.
 
 ```kotlin
 class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
@@ -112,7 +112,7 @@ class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
 }
 ```
 
-> Step 4. Apply the adapter you just created to RecycleView
+> Step 4. Apply the LiveSliderAdapter and your custom LiveSliderPagerAdapter on your RecycleView
 
 Define and initialize the `RecycleView` in the `MainActivity`.
 
@@ -120,6 +120,7 @@ Define and initialize the `RecycleView` in the `MainActivity`.
 mRecyclerView = findViewById(R.id.recycler_view)
 ...
 
+// definition of your recyclerview adapter
 mExampleAdapter = LiveSliderAdapter(ExamplePageAdapter(), true)
 mExampleAdapter!!.setHasStableIds(true)
 
@@ -130,6 +131,7 @@ mRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
         
+	// Only execute the animations that you are looking at.
         if (newState == RecyclerView.SCROLL_STATE_IDLE)
             mExampleAdapter!!.startAnimation((recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition())
             
@@ -137,7 +139,7 @@ mRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 })
 ```
 
-> Step 5. Set your contents data
+> Step 5. Set your recyclerview data with your contents.
 
 When you call the `setData()` function with parsed contents data, it applies directly to the `live-slider`.
 
@@ -151,7 +153,7 @@ mExampleAdapter!!.setData(mSampleData)
 
 **Finish!**
 
-You can further refer [example project](app).
+More details are in our [example project](app).
 
 
 ## License
