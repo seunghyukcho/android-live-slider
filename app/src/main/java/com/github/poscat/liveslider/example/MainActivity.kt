@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * setData() applies directly to the RecyclerView.
          */
-        mExampleAdapter!!.setData(mSampleData.toArray(array))
+        mExampleAdapter.setData(mSampleData.toArray(array))
     }
 
     private fun setDataExample() {
@@ -84,27 +84,44 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         mRecyclerView = findViewById(R.id.recycler_view)
-        mRecyclerView!!.itemAnimator = null  // Blink animation cancel(when data changed)
-        mRecyclerView!!.layoutManager = LinearLayoutManager(applicationContext, RecyclerView.VERTICAL, false)
-        mRecyclerView!!.setHasFixedSize(true)
+        mRecyclerView.itemAnimator = null  // Blink animation cancel(when data changed)
+        mRecyclerView.layoutManager = LinearLayoutManager(applicationContext, RecyclerView.VERTICAL, false)
+        mRecyclerView.setHasFixedSize(true)
 
         /**
          * Create CustomAdapter.
          */
         mExampleAdapter = LiveSliderAdapter(ExamplePageAdapter(), true)
-        mExampleAdapter!!.setHasStableIds(true)
+        mExampleAdapter.setHasStableIds(true)
 
-        mRecyclerView!!.adapter = mExampleAdapter
+        mRecyclerView.adapter = mExampleAdapter
 
-        mRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            /**
+             * If the ViewPager shown in RecycleView changes, start the animation.
+             */
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                var animationItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
 
-                /**
-                 * If the ViewPager shown in RecycleView changes, start the animation.
-                 */
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
-                    mExampleAdapter!!.startAnimation((recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition())
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (animationItemPosition == RecyclerView.NO_POSITION) {
+                        val firstItemPosition = layoutManager.findFirstVisibleItemPosition()
+                        val lastItemPosition = layoutManager.findLastVisibleItemPosition()
+                        val firstView = layoutManager.findViewByPosition(firstItemPosition)
+                        val lastView = layoutManager.findViewByPosition(lastItemPosition)
+
+                        animationItemPosition = when {
+                            firstItemPosition == RecyclerView.NO_POSITION -> lastItemPosition
+                            lastItemPosition == RecyclerView.NO_POSITION -> firstItemPosition
+                            (firstView!!.bottom - mRecyclerView.top) >= (mRecyclerView.bottom - lastView!!.top) -> firstItemPosition
+                            else -> lastItemPosition
+                        }
+                    }
+
+                    mExampleAdapter.startAnimation(animationItemPosition)
+                }
             }
         })
     }
