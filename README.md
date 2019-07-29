@@ -114,19 +114,35 @@ mRecyclerView = findViewById(R.id.recycler_view)
 
 // definition of your recyclerview adapter
 mExampleAdapter = LiveSliderAdapter(ExamplePageAdapter(), true)
-mExampleAdapter!!.setHasStableIds(true)
+mExampleAdapter.setHasStableIds(true)
 
-mRecyclerView!!.adapter = mExampleAdapter
+mRecyclerView.adapter = mExampleAdapter
 
 // If the ViewPager shown in RecycleView changes, start the animation.
-mRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
-        
-	// Only execute the animations that you are looking at.
-        if (newState == RecyclerView.SCROLL_STATE_IDLE)
-            mExampleAdapter!!.startAnimation((recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition())
-            
+        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+        var animationItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+	
+        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+            if (animationItemPosition == NO_POSITION) {
+                val firstItemPosition = layoutManager.findFirstVisibleItemPosition()
+                val lastItemPosition = layoutManager.findLastVisibleItemPosition()
+                val firstView = layoutManager.findViewByPosition(firstItemPosition)
+                val lastView = layoutManager.findViewByPosition(lastItemPosition)
+
+                animationItemPosition = when {
+                    firstItemPosition == NO_POSITION -> lastItemPosition
+                    lastItemPosition == NO_POSITION -> firstItemPosition
+                    (firstView!!.bottom - recycler_view.top) >= (recycler_view.bottom - lastView!!.top) -> firstItemPosition
+                    else -> lastItemPosition
+		}
+            }
+
+	    // Only execute the animations that you are looking at.
+            mFeedAdapter.startAnimation(animationItemPosition)
+        }
     }
 })
 ```
