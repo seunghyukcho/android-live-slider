@@ -11,10 +11,10 @@ import androidx.viewpager.widget.PagerAdapter
  *
  * @param T the type of the Feed item that you want.
  */
-abstract class LiveSliderPagerAdapter<T> : PagerAdapter() {
+abstract class LiveSliderPagerAdapter<T, U> : PagerAdapter() {
     private lateinit var viewContainer : ViewGroup
     private lateinit var context: Context
-    private var liveSliderFeed : LiveSliderFeed<T>? = null
+    private var liveSliderFeed : LiveSliderFeed<T, U>? = null
     private var animation : Boolean = false
 
     /**
@@ -37,7 +37,7 @@ abstract class LiveSliderPagerAdapter<T> : PagerAdapter() {
      */
     protected abstract fun createView(context: Context, container: ViewGroup, item: T) : View
 
-    fun setData(liveSliderFeed: LiveSliderFeed<T>?, animation: Boolean) {
+    fun setData(liveSliderFeed: LiveSliderFeed<T, U>?, animation: Boolean) {
         this.liveSliderFeed = liveSliderFeed
         this.animation = animation
     }
