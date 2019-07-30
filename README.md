@@ -80,7 +80,7 @@ data class ExampleItem (
 #### Step 3. Implement your customer PagerAdapter by inheriting the abstract class `LiveSliderPagerAdapter`.
 
 ```kotlin
-class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
+class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem, String>() {
     override fun createView(context: Context, container: ViewGroup, item: ExampleItem): View {
         val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         // Create and connect the view xml you want to display in the viewPager.
@@ -148,14 +148,14 @@ mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 ```
 
 #### Step 5. Set your recyclerview data with your contents. 
-When you call the `setData()` function with parsed contents data, it applies directly to the `live-slider` recyclerview.
+When you call the `setFeedData()` function with parsed contents data, it applies immediately to the `live-slider` recyclerview.
 
 ```kotlin
-var mSampleData: Array<LiveSliderFeed<ExampleItem>>
+var mSampleData: Array<LiveSliderFeed<ExampleItem, String>>
 
 ...
 
-mExampleAdapter!!.setData(mSampleData)
+mExampleAdapter!!.setFeedData(mSampleData)
 ```
 
 **Finish!**
