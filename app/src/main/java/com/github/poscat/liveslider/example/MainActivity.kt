@@ -29,14 +29,12 @@ class MainActivity : AppCompatActivity() {
          * Initialize the RecycleView.
          */
         initRecyclerView()
-
         mSampleData = ArrayList()
 
         /**
          * Insert your data as below.
          */
         setDataExample()
-
         val array = Array(mSampleData.size) { LiveSliderFeed<ExampleItem, String>() } // ArrayList to Array
 
         /**
