@@ -19,29 +19,33 @@ import java.util.*
  *
  * Use [me.relex.circleindicator.CircleIndicator] for ViewPager indicator
  */
-class LiveSliderAdapter<T>(): RecyclerView.Adapter<LiveSliderAdapter<T>.LiveSliderViewHolder>() {
-    private lateinit var pagerAdapter : LiveSliderPagerAdapter<T>
+open class LiveSliderAdapter<T, U>(): RecyclerView.Adapter<LiveSliderAdapter<T, U>.LiveSliderViewHolder>() {
+    private lateinit var pagerAdapter : LiveSliderPagerAdapter<T, U>
+    private lateinit var context : Context
     private var delay : Long = 0
     private var period : Long = 0
     private var currentFeed = 0
-    private var data : Array<LiveSliderFeed<T>>? = null
     private var autoSwipe : Boolean = false
+    protected var data : Array<LiveSliderFeed<T, U>>? = null
 
     /**
      * You can set ViewPager Auto Swipe and Timer Period use these constructor
      *
      * Default delay and period are 4s.
      */
-    constructor(pagerAdapter: LiveSliderPagerAdapter<T>) : this(pagerAdapter, false)
+    constructor(context: Context, pagerAdapter: LiveSliderPagerAdapter<T, U>) : this(context, pagerAdapter, false)
 
-    constructor(pagerAdapter: LiveSliderPagerAdapter<T>, autoSwipe: Boolean) : this(pagerAdapter, autoSwipe, 4000, 4000)
+    constructor(context: Context, pagerAdapter: LiveSliderPagerAdapter<T, U>, autoSwipe: Boolean) : this(context, pagerAdapter, autoSwipe, 4000, 4000)
 
-    constructor(pagerAdapter: LiveSliderPagerAdapter<T>, autoSwipe: Boolean, delay: Long, period: Long) : this() {
+    constructor(context: Context, pagerAdapter: LiveSliderPagerAdapter<T, U>, autoSwipe: Boolean, delay: Long, period: Long) : this() {
+        this.context = context
         this.pagerAdapter = pagerAdapter
         this.delay = delay
         this.period = period
         this.autoSwipe = autoSwipe
     }
+
+    protected open fun setHolderListener(holder: LiveSliderViewHolder, feed: LiveSliderFeed<T, U>, context: Context) {}
 
     override fun getItemId(position: Int) = data?.get(position).hashCode().toLong()
 
@@ -56,6 +60,7 @@ class LiveSliderAdapter<T>(): RecyclerView.Adapter<LiveSliderAdapter<T>.LiveSlid
         holder.setViewPager(feed,
                 animation = currentFeed == position,
                 autoSwipe = (currentFeed == position) && autoSwipe)
+        setHolderListener(holder, data!![position], context)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LiveSliderViewHolder {
@@ -85,18 +90,18 @@ class LiveSliderAdapter<T>(): RecyclerView.Adapter<LiveSliderAdapter<T>.LiveSlid
      *
      * @param data the type of the all RSS-feed data array
      */
-    fun setData(data: Array<LiveSliderFeed<T>>?) {
+    fun setFeedData(data: Array<LiveSliderFeed<T, U>>?) {
         this.data = data
         Log.d("datasize", this.data!!.size.toString())
         notifyDataSetChanged()
     }
 
-    inner class LiveSliderViewHolder(v: View, private val context: Context, private val pagerAdapter: LiveSliderPagerAdapter<T>, private val delay: Long, private val period: Long) : RecyclerView.ViewHolder(v) {
+    inner class LiveSliderViewHolder(v: View, private val context: Context, private val pagerAdapter: LiveSliderPagerAdapter<T, U>, private val delay: Long, private val period: Long) : RecyclerView.ViewHolder(v) {
         private val indicator: CircleIndicator = v.findViewById(R.id.indicator)
         private val viewPager: LiveSliderViewPager = v.findViewById(R.id.viewPager)
         private val timer: Timer = Timer()
         private var autoSwipe = false
-        private var newPagerAdapter : LiveSliderPagerAdapter<T>? = null
+        private var newPagerAdapter : LiveSliderPagerAdapter<T, U>? = null
 
         var currentPage = 0
         var timerTask : TimerTask? = null
@@ -132,7 +137,7 @@ class LiveSliderAdapter<T>(): RecyclerView.Adapter<LiveSliderAdapter<T>.LiveSlid
             newPagerAdapter?.refreshAnimation(position)
         }
 
-        fun setViewPager(data: LiveSliderFeed<T>?, animation: Boolean, autoSwipe: Boolean) {
+        fun setViewPager(data: LiveSliderFeed<T, U>?, animation: Boolean, autoSwipe: Boolean) {
             val listener = object : ViewPager.OnPageChangeListener {
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 

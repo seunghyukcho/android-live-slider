@@ -14,12 +14,12 @@ class MainActivity : AppCompatActivity() {
      * Define the RecyclerView and the CustomAdapter.
      */
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mExampleAdapter: LiveSliderAdapter<ExampleItem>
+    private lateinit var mExampleAdapter: ExampleRecyclerViewAdapter
 
     /**
      * This is sample data.
      */
-    private lateinit var mSampleData: ArrayList<LiveSliderFeed<ExampleItem>>
+    private lateinit var mSampleData: ArrayList<LiveSliderFeed<ExampleItem, String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,24 +30,25 @@ class MainActivity : AppCompatActivity() {
          */
         initRecyclerView()
 
-        mSampleData = ArrayList<LiveSliderFeed<ExampleItem>>()
+        mSampleData = ArrayList()
 
         /**
          * Insert your data as below.
          */
         setDataExample()
 
-        val array = Array(mSampleData.size) { LiveSliderFeed<ExampleItem>() } // ArrayList to Array
+        val array = Array(mSampleData.size) { LiveSliderFeed<ExampleItem, String>() } // ArrayList to Array
 
         /**
          * setData() applies directly to the RecyclerView.
          */
-        mExampleAdapter.setData(mSampleData.toArray(array))
+        mExampleAdapter.setFeedData(mSampleData.toArray(array))
     }
 
     private fun setDataExample() {
         // Set ample data1
-        var newItem1 = LiveSliderFeed<ExampleItem>()
+        val newItem1 = LiveSliderFeed<ExampleItem, String>()
+        newItem1.id = "Animal"
         newItem1.category = "Animal"
         val sampleItem1 = ArrayList<ExampleItem>()
         sampleItem1.add(ExampleItem("CAT", "A cat is a furry animal that has a long tail and sharp claws. Cats are often kept as pets.", BitmapFactory.decodeResource(resources, R.drawable.sample_cat)))
@@ -59,7 +60,8 @@ class MainActivity : AppCompatActivity() {
         mSampleData.add(newItem1)
 
         // Set ample data2
-        var newItem2 = LiveSliderFeed<ExampleItem>()
+        val newItem2 = LiveSliderFeed<ExampleItem, String>()
+        newItem2.id = "Food"
         newItem2.category = "Food"
         val sampleItem2 = ArrayList<ExampleItem>()
         sampleItem2.add(ExampleItem("STEAK", "A steak is a large flat piece of beef without much fat on it. You cook it by grilling or frying it.", BitmapFactory.decodeResource(resources, R.drawable.sample_steak)))
@@ -71,7 +73,8 @@ class MainActivity : AppCompatActivity() {
         mSampleData.add(newItem2)
 
         // Set ample data3
-        var newItem3 = LiveSliderFeed<ExampleItem>()
+        val newItem3 = LiveSliderFeed<ExampleItem, String>()
+        newItem3.id = "Transportation"
         newItem3.category = "Transportation"
         val sampleItem3 = ArrayList<ExampleItem>()
         sampleItem3.add(ExampleItem("SUBWAY", "A subway is an underground railway.", BitmapFactory.decodeResource(resources, R.drawable.sample_subway)))
@@ -91,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * Create CustomAdapter.
          */
-        mExampleAdapter = LiveSliderAdapter(ExamplePageAdapter(), true)
+        mExampleAdapter = ExampleRecyclerViewAdapter(applicationContext, ExamplePagerAdapter())
         mExampleAdapter.setHasStableIds(true)
 
         mRecyclerView.adapter = mExampleAdapter

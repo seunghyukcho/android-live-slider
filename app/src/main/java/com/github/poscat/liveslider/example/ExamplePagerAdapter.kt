@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.example_page.view.*
 /**
  * Inherit our library(LiveSliderPagerAdapter) and implement your CustomPageAdapter.
  */
-class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
+class ExamplePagerAdapter : LiveSliderPagerAdapter<ExampleItem, String>() {
     override fun createView(context: Context, container: ViewGroup, item: ExampleItem): View {
         val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         /**
