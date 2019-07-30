@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/shhj1998/android-live-slider.svg?branch=master)](https://travis-ci.org/shhj1998/android-live-slider)
 [![Jitpack](https://jitpack.io/v/shhj1998/android-live-slider.svg)](https://jitpack.io/#shhj1998/android-live-slider)
+![Downloads](https://jitpack.io/v/shhj1998/android-live-slider/month.svg)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Awesome Recyclerview library that supports live animations and auto swipe with ViewPager.
@@ -113,7 +114,7 @@ mRecyclerView = findViewById(R.id.recycler_view)
 ...
 
 // definition of your recyclerview adapter
-mExampleAdapter = LiveSliderAdapter(ExamplePageAdapter(), true)
+mExampleAdapter = LiveSliderAdapter(applicationContext, ExamplePageAdapter(), true)
 mExampleAdapter.setHasStableIds(true)
 
 mRecyclerView.adapter = mExampleAdapter
@@ -123,26 +124,9 @@ mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
         val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-        var animationItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+        var animationItemPosition = layoutManager.findFirstVisibleItemPosition()
 	
-        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-            if (animationItemPosition == NO_POSITION) {
-                val firstItemPosition = layoutManager.findFirstVisibleItemPosition()
-                val lastItemPosition = layoutManager.findLastVisibleItemPosition()
-                val firstView = layoutManager.findViewByPosition(firstItemPosition)
-                val lastView = layoutManager.findViewByPosition(lastItemPosition)
-
-                animationItemPosition = when {
-                    firstItemPosition == NO_POSITION -> lastItemPosition
-                    lastItemPosition == NO_POSITION -> firstItemPosition
-                    (firstView!!.bottom - recycler_view.top) >= (recycler_view.bottom - lastView!!.top) -> firstItemPosition
-                    else -> lastItemPosition
-		}
-            }
-
-	    // Only execute the animations that you are looking at.
-            mFeedAdapter.startAnimation(animationItemPosition)
-        }
+	mFeedAdapter.startAnimation(animationItemPosition)
     }
 })
 ```
