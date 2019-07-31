@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
@@ -9,7 +10,7 @@
         android:layout_height="wrap_content"
         android:hint="Category"
         android:textColor="#000"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -27,23 +28,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_action_search_dark"
+                android:gravity="center"
                 android:orientation="vertical"
-                android:gravity="center">
-
-                <ImageView android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_action_search_dark"
-                    android:layout_margin="10dp"/>
-
-                <TextView android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="There are no results to be shown."
-                    android:textSize="13dp"/>
-            </LinearLayout>
+                android:text="There are no results to be shown."
+                android:textSize="13sp"
+                tools:visibility="visible" />
 
             <com.github.poscat.liveslider.LiveSliderViewPager
                 android:id="@+id/viewPager"

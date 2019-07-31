@@ -11,7 +11,7 @@ Awesome Recyclerview library that supports live animations and auto swipe with V
 ## Requirements
 
 - Minimum SDK Version : 24
-- Recommended SDK Version : 28
+- Recommended SDK Version : 29
 
 
 ## Preview
