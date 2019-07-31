@@ -13,7 +13,6 @@ Awesome Recyclerview library that supports live animations and auto swipe with V
 - Minimum SDK Version : 24
 - Recommended SDK Version : 29
 
-
 ## Preview
 
 <img src="https://github.com/shhj1998/android-live-slider/blob/master/screenshot/live-slider.gif" width="40%" height="40%"/>
@@ -100,7 +99,7 @@ class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem, String>() {
         view.image.startAnimation(AnimationUtils.loadAnimation(context, R.anim.zoom))
         ...
     }
-    
+
     override fun stopAnimation(context: Context, view: View) {
         view.image.clearAnimation()
         ...
@@ -136,6 +135,7 @@ mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 ```
 
 #### Step 5. Set your recyclerview data with your contents. 
+
 When you call the `setFeedData()` function with parsed contents data, it applies immediately to the `live-slider` recyclerview.
 
 ```kotlin
