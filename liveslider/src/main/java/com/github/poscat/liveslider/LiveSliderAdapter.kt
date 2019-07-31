@@ -162,9 +162,7 @@ open class LiveSliderAdapter<T, U>(): RecyclerView.Adapter<LiveSliderAdapter<T, 
             viewPager.adapter = newPagerAdapter
 
             indicator.setViewPager(viewPager)
-            viewPager.post(Runnable {
-                listener.onPageSelected(currentPage)
-            })
+            viewPager.post { listener.onPageSelected(currentPage) }
         }
     }
 }

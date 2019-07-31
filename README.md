@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/shhj1998/android-live-slider.svg?branch=master)](https://travis-ci.org/shhj1998/android-live-slider)
 [![Jitpack](https://jitpack.io/v/shhj1998/android-live-slider.svg)](https://jitpack.io/#shhj1998/android-live-slider)
+[![Downloads](https://jitpack.io/v/shhj1998/android-live-slider/month.svg)](https://jitpack.io/#shhj1998/android-live-slider)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Awesome Recyclerview library that supports live animations and auto swipe with ViewPager.
@@ -10,8 +11,7 @@ Awesome Recyclerview library that supports live animations and auto swipe with V
 ## Requirements
 
 - Minimum SDK Version : 24
-- Recommended SDK Version : 28
-
+- Recommended SDK Version : 29
 
 ## Preview
 
@@ -80,7 +80,7 @@ data class ExampleItem (
 #### Step 3. Implement your customer PagerAdapter by inheriting the abstract class `LiveSliderPagerAdapter`.
 
 ```kotlin
-class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
+class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem, String>() {
     override fun createView(context: Context, container: ViewGroup, item: ExampleItem): View {
         val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         // Create and connect the view xml you want to display in the viewPager.
@@ -99,6 +99,7 @@ class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem>() {
         view.image.startAnimation(AnimationUtils.loadAnimation(context, R.anim.zoom))
         ...
     }
+
     override fun stopAnimation(context: Context, view: View) {
         view.image.clearAnimation()
         ...
@@ -113,7 +114,7 @@ mRecyclerView = findViewById(R.id.recycler_view)
 ...
 
 // definition of your recyclerview adapter
-mExampleAdapter = LiveSliderAdapter(ExamplePageAdapter(), true)
+mExampleAdapter = LiveSliderAdapter(applicationContext, ExamplePageAdapter(), true)
 mExampleAdapter.setHasStableIds(true)
 
 mRecyclerView.adapter = mExampleAdapter
@@ -122,45 +123,32 @@ mRecyclerView.adapter = mExampleAdapter
 mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
-        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-        var animationItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
-	
-        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-            if (animationItemPosition == NO_POSITION) {
-                val firstItemPosition = layoutManager.findFirstVisibleItemPosition()
-                val lastItemPosition = layoutManager.findLastVisibleItemPosition()
-                val firstView = layoutManager.findViewByPosition(firstItemPosition)
-                val lastView = layoutManager.findViewByPosition(lastItemPosition)
+        
+        if(newState == RecyclerView.SCROLL_STATE_IDLE) {
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val animationItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
 
-                animationItemPosition = when {
-                    firstItemPosition == NO_POSITION -> lastItemPosition
-                    lastItemPosition == NO_POSITION -> firstItemPosition
-                    (firstView!!.bottom - recycler_view.top) >= (recycler_view.bottom - lastView!!.top) -> firstItemPosition
-                    else -> lastItemPosition
-		}
-            }
-
-	    // Only execute the animations that you are looking at.
-            mFeedAdapter.startAnimation(animationItemPosition)
+            mExampleAdapter.startAnimation(animationItemPosition)
         }
     }
 })
 ```
 
 #### Step 5. Set your recyclerview data with your contents. 
-When you call the `setData()` function with parsed contents data, it applies directly to the `live-slider` recyclerview.
+
+When you call the `setFeedData()` function with parsed contents data, it applies immediately to the `live-slider` recyclerview.
 
 ```kotlin
-var mSampleData: Array<LiveSliderFeed<ExampleItem>>
+var mSampleData: Array<LiveSliderFeed<ExampleItem, String>>
 
 ...
 
-mExampleAdapter!!.setData(mSampleData)
+mExampleAdapter!!.setFeedData(mSampleData)
 ```
 
 **Finish!**
 
-More details are in our [example project](app).
+More details are in our [example project](app). Also, if you want to add listeners to category title like touch, you can see our other [example application](https://github.com/Park-Wonbin/android-rss-viewer).
 
 
 ## License

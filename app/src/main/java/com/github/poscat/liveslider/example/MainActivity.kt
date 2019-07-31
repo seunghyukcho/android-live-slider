@@ -1,8 +1,8 @@
 package com.github.poscat.liveslider.example
 
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.poscat.liveslider.LiveSliderAdapter
@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
      * Define the RecyclerView and the CustomAdapter.
      */
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mExampleAdapter: ExampleRecyclerViewAdapter
+    private lateinit var mExampleAdapter: LiveSliderAdapter<ExampleItem, String>
 
     /**
      * This is sample data.
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * Create CustomAdapter.
          */
-        mExampleAdapter = ExampleRecyclerViewAdapter(applicationContext, ExamplePagerAdapter())
+        mExampleAdapter = LiveSliderAdapter(applicationContext, ExamplePagerAdapter(), true)
         mExampleAdapter.setHasStableIds(true)
 
         mRecyclerView.adapter = mExampleAdapter
@@ -103,23 +103,10 @@ class MainActivity : AppCompatActivity() {
              */
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                var animationItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
 
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (animationItemPosition == RecyclerView.NO_POSITION) {
-                        val firstItemPosition = layoutManager.findFirstVisibleItemPosition()
-                        val lastItemPosition = layoutManager.findLastVisibleItemPosition()
-                        val firstView = layoutManager.findViewByPosition(firstItemPosition)
-                        val lastView = layoutManager.findViewByPosition(lastItemPosition)
-
-                        animationItemPosition = when {
-                            firstItemPosition == RecyclerView.NO_POSITION -> lastItemPosition
-                            lastItemPosition == RecyclerView.NO_POSITION -> firstItemPosition
-                            (firstView!!.bottom - mRecyclerView.top) >= (mRecyclerView.bottom - lastView!!.top) -> firstItemPosition
-                            else -> lastItemPosition
-                        }
-                    }
+                if(newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val animationItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
 
                     mExampleAdapter.startAnimation(animationItemPosition)
                 }
