@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/shhj1998/android-live-slider.svg?branch=master)](https://travis-ci.org/shhj1998/android-live-slider)
 [![Jitpack](https://jitpack.io/v/shhj1998/android-live-slider.svg)](https://jitpack.io/#shhj1998/android-live-slider)
-![Downloads](https://jitpack.io/v/shhj1998/android-live-slider/month.svg)
+[![Downloads](https://jitpack.io/v/shhj1998/android-live-slider/month.svg)](https://jitpack.io/#shhj1998/android-live-slider)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Awesome Recyclerview library that supports live animations and auto swipe with ViewPager.
@@ -100,6 +100,7 @@ class ExamplePageAdapter : LiveSliderPagerAdapter<ExampleItem, String>() {
         view.image.startAnimation(AnimationUtils.loadAnimation(context, R.anim.zoom))
         ...
     }
+    
     override fun stopAnimation(context: Context, view: View) {
         view.image.clearAnimation()
         ...
@@ -123,10 +124,13 @@ mRecyclerView.adapter = mExampleAdapter
 mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
     override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
-        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-        var animationItemPosition = layoutManager.findFirstVisibleItemPosition()
-	
-	mFeedAdapter.startAnimation(animationItemPosition)
+        
+        if(newState == RecyclerView.SCROLL_STATE_IDLE) {
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val animationItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+
+            mExampleAdapter.startAnimation(animationItemPosition)
+        }
     }
 })
 ```
@@ -144,7 +148,7 @@ mExampleAdapter!!.setFeedData(mSampleData)
 
 **Finish!**
 
-More details are in our [example project](app).
+More details are in our [example project](app). Also, if you want to add listeners to category title like touch, you can see our other [example application](https://github.com/Park-Wonbin/android-rss-viewer).
 
 
 ## License
